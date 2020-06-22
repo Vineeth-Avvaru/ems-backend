@@ -91,4 +91,16 @@ app.post("/login", (req, res)=> {
     }
 })
 
+app.get("/fetchEmployees", (req, res)=> {
+    let response = {
+        employeesData : []
+    }
+    const fetchEmployeesData = 'SELECT ID, Name, Role, Description FROM Employees';
+    connection.query(fetchEmployeesData, (err, result)=> {
+        if(err) console.log('error', err);
+        response.employeesData = result;
+        res.send(response);
+    })
+})
+
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
