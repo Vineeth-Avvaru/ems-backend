@@ -61,6 +61,7 @@ connection.query(insertEmployeeData_query, [employeeData], function(err) {
 });
 
 app.post("/login", (req, res)=> {
+
     let response = {
         name: "",
         isUserAuthentic : false
@@ -92,6 +93,7 @@ app.post("/login", (req, res)=> {
 })
 
 app.get("/fetchEmployees", (req, res)=> {
+
     let response = {
         employeesData : []
     }
@@ -101,6 +103,21 @@ app.get("/fetchEmployees", (req, res)=> {
         response.employeesData = result;
         res.send(response);
     })
+})
+
+app.put("/addEmployee", (req, res) => {
+
+    let employee = [
+        [req.body.id, req.body.name, req.body.password, req.body.role, req.body.description]
+    ];
+
+    const insertEmployee = `INSERT INTO Employees VALUES ?`;
+    connection.query(insertEmployee, [employee], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: 'Employee Added'
+        })
+      });
 })
 
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
