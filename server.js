@@ -48,17 +48,17 @@ connection.query(employeeTable_query,(err, result)=>{
     if(err) console.log('error', err);
 })
 
-const insertAdminData_query = 'INSERT INTO Admins(ID, Name, Password) VALUES ?'  
+// const insertAdminData_query = 'INSERT INTO Admins(ID, Name, Password) VALUES ?'  
 
-connection.query(insertAdminData_query, [adminData], function(err) {
-    if(err) console.log('error', err);
-});
+// connection.query(insertAdminData_query, [adminData], function(err) {
+//     if(err) console.log('error', err);
+// });
 
-const insertEmployeeData_query = 'INSERT INTO Employees VALUES ?'  
+// const insertEmployeeData_query = 'INSERT INTO Employees VALUES ?'  
 
-connection.query(insertEmployeeData_query, [employeeData], function(err) {
-    if(err) console.log('error', err);
-});
+// connection.query(insertEmployeeData_query, [employeeData], function(err) {
+//     if(err) console.log('error', err);
+// });
 
 app.post("/login", (req, res)=> {
 
@@ -116,6 +116,18 @@ app.put("/addEmployee", (req, res) => {
         if (err) throw err;
         res.send({
             message: 'Employee Added'
+        })
+      });
+})
+
+app.delete("/deleteEmployee", (req, res)=> {
+
+    const deleteEmployee = `DELETE FROM Employees WHERE ID = ? `;
+
+    connection.query(deleteEmployee,[req.body.id], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: 'Employee Removed'
         })
       });
 })
