@@ -144,4 +144,16 @@ app.patch("/updateEmployee", (req, res) => {
       });
 })
 
+app.post("/fetchEmployeeByID", (req, res) => {
+
+
+    const fetchEmployeeByID = 'SELECT * FROM Employees WHERE ID = ?';
+
+    connection.query(fetchEmployeeByID,[req.body.id], function (err, result) {
+        if (err) throw err;
+        res.send(result[0]);
+      });
+
+})
+
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
