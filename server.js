@@ -133,4 +133,15 @@ app.delete("/deleteEmployee", (req, res)=> {
       });
 })
 
+app.patch("/updateEmployee", (req, res) => {
+    const updateEmployee = 'UPDATE Employees SET Role = ?, Description = ? WHERE ID = ?';
+
+    connection.query(updateEmployee,[req.body.role, req.body.description, req.body.id], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: `${req.body.id} Updated`
+        })
+      });
+})
+
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
