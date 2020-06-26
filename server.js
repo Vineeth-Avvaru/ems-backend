@@ -10,7 +10,7 @@ const mysql = require('mysql');
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, PATCH, OPTIONS');
     next();
 });
 
@@ -46,6 +46,11 @@ connection.query(adminTable_query,(err, result)=>{
 
 const employeeTable_query = 'CREATE TABLE IF NOT EXISTS Employees(ID varchar(25), Name varchar(25), Password varchar(25), Role varchar(25), Description varchar(100))'
 connection.query(employeeTable_query,(err, result)=>{
+    if(err) console.log('error', err);
+})
+
+const reviewTable_query = 'CREATE TABLE IF NOT EXISTS Reviews(givenBy varchar(25), givenTo varchar(25), review varchar(250))';
+connection.query(reviewTable_query,(err, result)=>{
     if(err) console.log('error', err);
 })
 
@@ -146,7 +151,6 @@ app.patch("/updateEmployee", (req, res) => {
 
 app.post("/fetchEmployeeByID", (req, res) => {
 
-
     const fetchEmployeeByID = 'SELECT * FROM Employees WHERE ID = ?';
 
     connection.query(fetchEmployeeByID,[req.body.id], function (err, result) {
@@ -154,6 +158,43 @@ app.post("/fetchEmployeeByID", (req, res) => {
         res.send(result[0]);
       });
 
+})
+
+app.put("/addReview", (req, res) => {
+    let review = [
+        [req.body.givenBy, req.body.givenTo, req.body.review]
+    ];
+
+    const insertReview = `INSERT INTO Reviews VALUES ?`;
+    connection.query(insertReview, [review], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: 'Review Added'
+        })
+      });
+})
+
+app.patch("/updateReview", (req, res) => {
+    const updateReview = 'UPDATE Reviews SET review = ? WHERE givenBy = ? AND givenTo = ?';
+
+    connection.query(updateReview,[req.body.review, req.body.givenBy, req.body.givenTo], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: 'Review Updated'
+        })
+      });
+})
+
+app.post("/fetchReview", (req, res) => {
+    const fetchEmployeeByID = 'SELECT review FROM Reviews WHERE givenBy = ? AND givenTo = ?';
+
+    connection.query(fetchEmployeeByID,[req.body.givenBy, req.body.givenTo], function (err, result) {
+        if (err) throw err;
+        if(result.length!== 0) res.send(result[0]);
+        else res.send({
+            review: null
+        })
+      });
 })
 
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
