@@ -192,7 +192,7 @@ app.post("/fetchReview", (req, res) => {
         if (err) throw err;
         if(result.length!== 0) res.send(result[0]);
         else res.send({
-            review: null
+            review: "null"
         })
       });
 })
