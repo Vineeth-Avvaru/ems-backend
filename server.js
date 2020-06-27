@@ -6,6 +6,7 @@ const express = require('express')
 const app = express();
 const port = 5000;
 const mysql = require('mysql');
+const fetch = require('node-fetch');
 
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
@@ -196,5 +197,19 @@ app.post("/fetchReview", (req, res) => {
         })
       });
 })
+
+app.post("/fetchEmpReviews", (req, res) => {
+    let response = {
+        reviewsData : []
+    }
+    const fetchEmpReviews = 'SELECT * FROM Reviews WHERE givenTo = ?';
+
+    connection.query(fetchEmpReviews,[req.body.eID], function (err, result) {
+        if (err) throw err;
+        response.reviewsData = result;
+        res.send(response);
+      });
+})
+
 
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
