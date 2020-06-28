@@ -55,6 +55,12 @@ connection.query(reviewTable_query,(err, result)=>{
     if(err) console.log('error', err);
 })
 
+const feedbackTable_query = 'CREATE TABLE IF NOT EXISTS Feedbacks(givenBy varchar(25), givenTo varchar(25), feedback varchar(250))';
+connection.query(feedbackTable_query,(err, result)=>{
+    if(err) console.log('error', err);
+})
+
+
 // const insertAdminData_query = 'INSERT INTO Admins(ID, Name, Password) VALUES ?'  
 
 // connection.query(insertAdminData_query, [adminData], function(err) {
@@ -187,9 +193,9 @@ app.patch("/updateReview", (req, res) => {
 })
 
 app.post("/fetchReview", (req, res) => {
-    const fetchEmployeeByID = 'SELECT review FROM Reviews WHERE givenBy = ? AND givenTo = ?';
+    const fetchReview = 'SELECT review FROM Reviews WHERE givenBy = ? AND givenTo = ?';
 
-    connection.query(fetchEmployeeByID,[req.body.givenBy, req.body.givenTo], function (err, result) {
+    connection.query(fetchReview,[req.body.givenBy, req.body.givenTo], function (err, result) {
         if (err) throw err;
         if(result.length!== 0) res.send(result[0]);
         else res.send({
@@ -211,5 +217,41 @@ app.post("/fetchEmpReviews", (req, res) => {
       });
 })
 
+app.put("/addFeedback", (req, res) => {
+    let feedback = [
+        [req.body.givenBy, req.body.givenTo, req.body.feedback]
+    ];
+
+    const insertFeedback = `INSERT INTO Feedbacks VALUES ?`;
+    connection.query(insertFeedback, [feedback], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: 'Feedback Added'
+        })
+      });
+})
+
+app.patch("/updateFeedback", (req, res) => {
+    const updateFeedback = 'UPDATE Feedbacks SET feedback = ? WHERE givenBy = ? AND givenTo = ?';
+
+    connection.query(updateFeedback,[req.body.feedback, req.body.givenBy, req.body.givenTo], function (err, result) {
+        if (err) throw err;
+        res.send({
+            message: 'Feedback Updated'
+        })
+      });
+})
+
+app.post("/fetchFeedback", (req, res) => {
+    const fetchFeedback = 'SELECT feedback FROM Feedbacks WHERE givenBy = ? AND givenTo = ?';
+
+    connection.query(fetchFeedback,[req.body.givenBy, req.body.givenTo], function (err, result) {
+        if (err) throw err;
+        if(result.length!== 0) res.send(result[0]);
+        else res.send({
+            feedback: "null"
+        })
+      });
+})
 
 app.listen(port, ()=> console.log(`EMS listening on port ${port}!`))
