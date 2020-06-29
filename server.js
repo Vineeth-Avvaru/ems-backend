@@ -61,17 +61,17 @@ connection.query(feedbackTable_query,(err, result)=>{
 })
 
 
-// const insertAdminData_query = 'INSERT INTO Admins(ID, Name, Password) VALUES ?'  
+const insertAdminData_query = 'INSERT INTO Admins(ID, Name, Password) VALUES ?'  
 
-// connection.query(insertAdminData_query, [adminData], function(err) {
-//     if(err) console.log('error', err);
-// });
+connection.query(insertAdminData_query, [adminData], function(err) {
+    if(err) console.log('error', err);
+});
 
-// const insertEmployeeData_query = 'INSERT INTO Employees VALUES ?'  
+const insertEmployeeData_query = 'INSERT INTO Employees VALUES ?'  
 
-// connection.query(insertEmployeeData_query, [employeeData], function(err) {
-//     if(err) console.log('error', err);
-// });
+connection.query(insertEmployeeData_query, [employeeData], function(err) {
+    if(err) console.log('error', err);
+});
 
 app.post("/login", (req, res)=> {
 
