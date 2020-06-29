@@ -31,10 +31,10 @@ Inserts the data in *dummyData* folder to Admins & Employees Tables. <br/>
 | A02 | Shane | Black    |
 
 - Initial Employees Table <br/>
-| ID  | Name  | Password  | Role            | Description   |
-|-----|-------|-----------|-----------------|---------------|
-| E01 | Okada | Kazuchika | Lead Fighter    | He Fights     |
-| E02 | Kenny | Omega     | Lead Challenger | He Challenges |
+| ID | Name | Password | Role | Description |
+|-|-|-|-|-|
+| E01 | Okada | Kazuchika | Lead Fighter | He Fights |
+| E02 | Kenny | Omega | Lead Challenger | He Challenges |
 
 Once the Initial data is created, stop the server and comment the lines 64-74 in **server.js** so that the dummy data wont be added to the db everytime server is run<br/> 
 ```js
